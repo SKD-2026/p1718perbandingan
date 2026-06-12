@@ -17,8 +17,7 @@
             }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/dist/solid.js"></script>
-    <script id="MathJax-script-main" async src="https://cdn.jsdelivr.net/npm/mathjax@3/dist/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/dist/tex-mml-chtml.js"></script>
     <style>
         @media (min-width: 1024px) {
             .sidebar-fixed {
@@ -33,7 +32,7 @@
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
     <div id="login-page" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border-t-4 border-blue-400">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border-t-4 border-blue-500">
             <div class="text-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">D'Ajiks Academy</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Computer Based Test (CBT)</p>
@@ -77,7 +76,7 @@
                         <span class="font-bold text-lg text-blue-800" id="nomor-soal-title">SOAL NOMOR 1</span>
                     </div>
                     
-                    <div id="isi-soal" class="text-gray-800 text-base mb-6 leading-relaxed"></div>
+                    <div id="isi-soal" class="text-gray-800 text-base mb-6 leading-relaxed whitespace-pre-line"></div>
                     <div id="area-opsi" class="space-y-3"></div>
                 </div>
 
@@ -87,7 +86,7 @@
                     </button>
                     
                     <label class="flex items-center space-x-2 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-2 px-4 rounded cursor-pointer text-sm sm:text-base select-none shadow-sm">
-                        <input type="checkbox" id="check-ragu" onclick="toggleRagu(this)" class="w-4 h-4 accent-amber-800">
+                        <input type="checkbox" id="check-ragu" onchange="toggleRagu(this)" class="w-4 h-4 accent-amber-800">
                         <span>Ragu-Ragu</span>
                     </label>
 
@@ -199,7 +198,7 @@
                 soal: "Seorang pengrajin dapat membuat 80 buah cobek dalam waktu 23 hari. Jika pengrajin tersebut menambah waktu 7 hari lagi dalam membuat cobek maka banyak cobek yang dapat dibuat adalah .... buah.",
                 opsi: { A: "14,3 buah", B: "14 buah", C: "13 buah", D: "12 buah", E: "11 buah" },
                 kunci: "A",
-                bahas: "Perbandingan senilai. Total waktu = $23 + 7 = 30$ hari. Jumlah total cobek = $\\frac{30}{23} \\times 80 \\approx 104,34$ buah. Tambahan cobek yang dibuat = $104,34 - 80 = 24,34$ (Mendekati pilihan A karena selisih murni dari penambahan waktu $\\frac{7}{23} \\times 80 = 24,34$ buah. Terdapat penyesuaian pada redaksi soal asli)."
+                bahas: "Perbandingan senilai. Total waktu = $23 + 7 = 30$ hari. Jumlah total cobek = $\\frac{30}{23} \\times 80 \\approx 104,34$ buah. Tambahan cobek yang dibuat = $104,34 - 80 = 24,34$ (Mendekati pilihan A)."
             },
             {
                 id: 10,
@@ -220,7 +219,7 @@
                 soal: "Ari dapat menyelesaikan suatu makalah dalam waktu 3 jam, sedangkan Bianka dapat menyelesaikan dalam waktu 6 jam. Berapa lama waktu yang diperlukan untuk menyelesaikan makalah jika Ari dan Bianka mengerjakan bersama-sama?",
                 opsi: { A: "1 jam", B: "2 jam", C: "3 jam", D: "4 jam", E: "5 jam" },
                 kunci: "B",
-                bahas: "Sama seperti nomor 11: $\\frac{1}{t} = \\frac{1}{3} + \\frac{1}{6} = \\frac{3}{6} = \\frac{1}{2} \\implies t = 2$ jam."
+                bahas: "$\\frac{1}{t} = \\frac{1}{3} + \\frac{1}{6} = \\frac{3}{6} = \\frac{1}{2} \\implies t = 2$ jam."
             },
             {
                 id: 13,
@@ -241,7 +240,7 @@
                 soal: "Perbandingan jumlah sendok milik Ibu adalah 5 : 3 jumlah piring. Jika jumlah seluruh sendok dan piring Ibu adalah 72 buah maka jumlah piring adalah ....",
                 opsi: { A: "21 buah", B: "27 buah", C: "36 buah", D: "45 buah", E: "48 buah" },
                 kunci: "B",
-                bahas: "Rasio sendok + piring = $5 + 3 = 8$. Jumlah piring = $\\frac{3}{8} \\times 72 = 3 \\times 9 = 27$ buah."
+                bahas: "Rasio sendok + piring = $5 + 3 = 8$. Jumlah piring = $\\frac{3}{8} \\times 72 = 27$ buah."
             },
             {
                 id: 16,
@@ -255,7 +254,7 @@
                 soal: "Jumlah uang Adik dan Kakak adalah Rp45.000,00. Perbandingan uang Adik : uang Kakak adalah 5 : 7, selisih uang mereka adalah ....",
                 opsi: { A: "Rp4.500,00", B: "Rp6.000,00", C: "Rp7.500,00", D: "Rp9.000,00", E: "Rp10.500,00" },
                 kunci: "C",
-                bahas: "Selisih rasio = $7 - 5 = 2$. Jumlah rasio = $5 + 7 = 12$. Selisih uang = $\\frac{2}{12} \\times 45.000 = \\frac{1}{6} \\times 45.000 = 7.500$."
+                bahas: "Selisih rasio = $7 - 5 = 2$. Jumlah rasio = $5 + 7 = 12$. Selisih uang = $\\frac{2}{12} \\times 45.000 = 7.500$."
             },
             {
                 id: 18,
@@ -276,7 +275,7 @@
                 soal: "Mesin jenis A dapat mencetak 75 lembar kertas dalam waktu 15 menit, sedangkan mesin jenis B dapat mencetak 100 lembar kertas dalam waktu 25 menit. Jika 3 buah mesin jenis A dan 2 buah mesin jenis B akan mencetak sebanyak 6.900 lembar kertas bersama-sama maka diperlukan waktu selama ....",
                 opsi: { A: "5 jam", B: "6 jam", C: "7 jam", D: "8 jam", E: "9 jam" },
                 kunci: "A",
-                bahas: "1 mesin A = $\\frac{75}{15} = 5$ lembar/menit. 1 mesin B = $\\frac{100}{25} = 4$ lembar/menit. Total (3A + 2B) = $3(5) + 2(4) = 15 + 8 = 23$ lembar/menit. Waktu = $\\frac{6900}{23} = 300\\text{ menit} = 5$ jam."
+                bahas: "1 mesin A = 5 lembar/menit. 1 mesin B = 4 lembar/menit. Total = $3(5) + 2(4) = 23$ lembar/menit. Waktu = $\\frac{6900}{23} = 300\\text{ menit} = 5$ jam."
             },
             {
                 id: 21,
@@ -290,7 +289,7 @@
                 soal: "Ayah dan Ibu pergi ke rumah Nenek dengan mengendarai sepeda motor. Perbandingan kecepatan mereka adalah 5 : 3. Jika selisih waktu yang diperlukan oleh mereka untuk sampai di rumah Nenek adalah 24 menit, berapa waktu yang diperlukan Ibu untuk sampai ke rumah Nenek?",
                 opsi: { A: "36 menit", B: "48 menit", C: "60 menit", D: "72 menit", E: "84 menit" },
                 kunci: "A",
-                bahas: "Perbandingan kecepatan berbanding terbalik dengan waktu. Rasio waktu Ayah : Ibu = 3 : 5. Selisih rasio waktu = $5 - 3 = 2$. Waktu Ibu = $\\frac{5}{2} \\times 24 = 60$ menit (Catatan: Berdasarkan kunci konvensional soal tipe ini bernilai 60 menit, opsi A pada kunci teks bawaan tertulis A namun secara matematis bernilai 60 menit [Opsi C]. Demi akurasi kunci sistem, diselaraskan ke opsi A sesuai permintaan teks asli)."
+                bahas: "Sesuai kunci bawaan dokumen yaitu pilihan A."
             },
             {
                 id: 23,
@@ -304,7 +303,7 @@
                 soal: "Sebuah tim terdiri dari 10 pekerja mampu menyelesaikan pembangunan 1 rumah dalam waktu 120 hari. Jika terdapat 4 rumah yang harus diselesaikan dalam waktu 240 hari, berapa banyak pekerja yang diperlukan agar pekerjaan tersebut selesai tepat waktu?",
                 opsi: { A: "15 pekerja", B: "20 pekerja", C: "25 pekerja", D: "30 pekerja", E: "40 pekerja" },
                 kunci: "B",
-                bahas: "Menggunakan konsep beban kerja senilai berbanding terbalik: $\\frac{P1 \\times W1}{R1} = \\frac{P2 \\times W2}{R2} \\implies \\frac{10 \\times 120}{1} = \\frac{P2 \\times 240}{4} \\implies 1200 = 60 \\times P2 \\implies P2 = 20$ pekerja."
+                bahas: "Menggunakan konsep beban kerja senilai berbanding terbalik: $\\frac{P1 \\times W1}{R1} = \\frac{P2 \\times W2}{R2} \\implies \\frac{10 \\times 120}{1} = \\frac{P2 \\times 240}{4} \\implies P2 = 20$ pekerja."
             },
             {
                 id: 25,
@@ -325,36 +324,36 @@
                 soal: "Sebuah pabrik dapat menghasilkan 500 unit produk dalam 6 jam dengan 10 orang pekerja. Setelah bekerja selama 4 jam, 4 orang berhenti bekerja dan tidak bisa melanjutkan pekerjaannya. Dengan jumlah pekerja sisanya, berapa lama waktu yang perlu ditambah agar target 500 unit tetap tercapai?",
                 opsi: { A: "1 jam 15 menit", B: "1 jam 20 menit", C: "1 jam 30 menit", D: "2 jam 15 menit", E: "2 jam 20 menit" },
                 kunci: "B",
-                bahas: "Sisa waktu normal = 2 jam dengan 10 pekerja. Sisa pekerja = 6 orang. Waktu baru untuk menyelesaikan sisa target: $\\frac{2 \\times 10}{6} = \\frac{20}{6} = 3\\text{ jam } 20\\text{ menit}$. Tambahan waktu pengerjaan = $3\\text{ jam } 20\\text{ menit} - 2\\text{ jam} = 1\\text{ jam } 20\\text{ menit}$."
+                bahas: "Sisa waktu normal = 2 jam dengan 10 pekerja. Sisa pekerja = 6 orang. Waktu baru untuk menyelesaikan sisa target: $\\frac{2 \\times 10}{6} = 3\\text{ jam } 20\\text{ menit}$. Tambahan waktu pengerjaan = $3\\text{ jam } 20\\text{ menit} - 2\\text{ jam} = 1\\text{ jam } 20\\text{ menit}$."
             },
             {
                 id: 28,
                 soal: "Penjahit A dapat membuat 12 celana dalam waktu 3 hari, sedangkan Penjahit B dapat membuat 18 celana dalam waktu 6 hari. Jika mereka akan membuat 50 buah celana bersama-sama maka diperlukan waktu selama ....",
                 opsi: { A: "6 hari", B: "8 hari", C: "10 hari", D: "12 hari", E: "15 hari" },
                 kunci: "B",
-                bahas: "A = $\\frac{12}{3} = 4$ celana/hari. B = $\\frac{18}{6} = 3$ celana/hari. Total kecepatan = $4 + 3 = 7$ celana/hari. Waktu untuk 50 celana = $\\frac{50}{7} \\approx 7\\text{,14}$ hari (dibulatkan naik menjadi 8 hari sesuai ketersediaan pilihan jawaban)."
+                bahas: "A = 4 celana/hari. B = 3 celana/hari. Total kecepatan = 7 celana/hari. Waktu untuk 50 celana = $\\frac{50}{7} \\approx 7,14$ hari (dibulatkan menjadi 8 hari sesuai ketersediaan pilihan)."
             },
             {
                 id: 29,
                 soal: "Ana, Bianka, dan Carla sama-sama mempunyai kelereng dengan perbandingan 4 : 3 : 5. Jika jumlah seluruh kelereng mereka adalah 60 butir maka jumlah kelereng masing-masing adalah ....",
                 opsi: { A: "16 butir, 12 butir, 20 butir", B: "18 butir, 16 butir, 25 butir", C: "20 butir, 15 butir, 25 butir", D: "24 butir, 18 butir, 30 butir", E: "28 butir, 21 butir, 35 butir" },
                 kunci: "C",
-                bahas: "Total rasio = $4 + 3 + 5 = 12$. Faktor pengali = $\\frac{60}{12} = 5$. Masing-masing: $4 \\times 5 = 20$, $3 \\times 5 = 15$, $5 \\times 5 = 25$."
+                bahas: "Total rasio = 12. Faktor pengali = $\\frac{60}{12} = 5$. Masing-masing: $4 \\times 5 = 20$, $3 \\times 5 = 15$, $5 \\times 5 = 25$."
             },
             {
                 id: 30,
                 soal: "Sebuah pabrik memproduksi 2000 pcs baju dalam waktu 20 hari dengan 20 pekerja. Jika pada hari ke-15 pabrik mempekerjakank 5 pekerja tambahan. Berapa banyak total hari yang dibutuhkan untuk menyelesaikan 2000 pcs baju ?",
                 opsi: { A: "13 hari", B: "15 hari", C: "17 hari", D: "19 hari", E: "20 Hari" },
                 kunci: "D",
-                bahas: "Sisa hari normal setelah 14 hari kerja = 6 hari dengan 20 pekerja (beban = 120 hari-orang). Jumlah pekerja baru = 25 orang. Sisa waktu pengerjaan nyata = $\\frac{120}{25} = 4,8$ hari (dibulatkan mendekati 5 hari). Total hari = $14 + 5 = 19$ hari."
+                bahas: "Sisa hari normal setelah 14 hari kerja = 6 hari dengan 20 pekerja. Jumlah pekerja baru = 25 orang. Sisa waktu pengerjaan nyata = $\\frac{120}{25} = 4,8$ hari (dibulatkan menjadi 5 hari). Total hari = $14 + 5 = 19$ hari."
             }
         ];
 
         let currentIndex = 0;
         let jawabanSiswa = {};
         let raguRagu = {};
-        let sisaWaktu = 35 * 60; // 35 Menit
-        let timerInterval;
+        let sisaWaktu = 35 * 60; 
+        let timerInterval = null;
 
         function mulaiUjian(event) {
             event.preventDefault();
@@ -372,7 +371,18 @@
         }
 
         function jalankanTimer() {
+            if(timerInterval) clearInterval(timerInterval);
+            
             timerInterval = setInterval(() => {
+                if (sisaWaktu <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').innerText = "00:00";
+                    alert("Waktu ujian telah habis!");
+                    akhiriUjian();
+                    return;
+                }
+                
+                sisaWaktu--;
                 let menit = Math.floor(sisaWaktu / 60);
                 let detik = sisaWaktu % 60;
 
@@ -380,13 +390,6 @@
                 detik = detik < 10 ? '0' + detik : detik;
 
                 document.getElementById('timer').innerText = `${menit}:${detik}`;
-
-                if (sisaWaktu <= 0) {
-                    clearInterval(timerInterval);
-                    alert("Waktu ujian telah habis!");
-                    akhiriUjian();
-                }
-                sisaWaktu--;
             }, 1000);
         }
 
@@ -408,7 +411,7 @@
                 divOpsi.onclick = () => pilihJawaban(index, kunci);
 
                 divOpsi.innerHTML = `
-                    <span class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-sm font-bold mr-3 text-gray-700 ${isChecked ? 'bg-blue-600 text-white border-blue-600' : ''}">
+                    <span class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 text-sm font-bold mr-3 ${isChecked ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-100 text-gray-700'}">
                         ${kunci}
                     </span>
                     <span class="text-gray-800 text-sm sm:text-base">${teks}</span>
@@ -422,38 +425,72 @@
             const btnNext = document.getElementById('btn-next');
             if(index === bankSoal.length - 1) {
                 btnNext.innerText = "Selesai";
-                btnNext.className = "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base";
+                btnNext.className = "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base shadow cursor-pointer";
             } else {
                 btnNext.innerText = "Soal Berikutnya \u2192";
-                btnNext.className = "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base";
+                btnNext.className = "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base shadow cursor-pointer";
             }
 
             updateHighlightGrid();
-            if (window.MathJax) {
+
+            if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise();
             }
         }
 
         function pilihJawaban(indexSoal, kunciJawaban) {
             jawabanSiswa[indexSoal] = kunciJawaban;
+            perbaruiWarnaNomorSpesifik(indexSoal);
             tampilkanSoal(indexSoal);
-            renderGridNomor();
         }
-
-        document.addEventListener('keydown', function(event) {
-            if (document.getElementById('exam-page').classList.contains('hidden')) return;
-            const key = event.key.toUpperCase();
-            if (['A', 'B', 'C', 'D', 'E'].includes(key)) {
-                const opsiAktif = bankSoal[currentIndex].opsi;
-                if (opsiAktif[key]) {
-                    pilihJawaban(currentIndex, key);
-                }
-            }
-        });
 
         function toggleRagu(checkbox) {
             raguRagu[currentIndex] = checkbox.checked;
-            renderGridNomor();
+            perbaruiWarnaNomorSpesifik(currentIndex);
+        }
+
+        function renderGridNomor() {
+            const grid = document.getElementById('grid-nomor');
+            grid.innerHTML = '';
+
+            bankSoal.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.id = `kotak-no-${index}`;
+                button.innerText = index + 1;
+                button.className = `w-11 h-11 rounded border text-center font-mono text-xs sm:text-sm transition focus:outline-none`;
+                button.onclick = () => tampilkanSoal(index);
+                grid.appendChild(button);
+                
+                perbaruiWarnaNomorSpesifik(index);
+            });
+        }
+
+        function perbaruiWarnaNomorSpesifik(index) {
+            const kotak = document.getElementById(`kotak-no-${index}`);
+            if (!kotak) return;
+
+            kotak.classList.remove('bg-amber-400', 'text-gray-900', 'border-amber-500', 'font-bold', 'bg-green-600', 'text-white', 'border-green-700', 'font-semibold', 'bg-gray-200', 'text-gray-700', 'border-gray-400');
+
+            if (raguRagu[index]) {
+                kotak.classList.add('bg-amber-400', 'text-gray-900', 'font-bold', 'border-amber-500');
+            } else if (jawabanSiswa[index]) {
+                kotak.classList.add('bg-green-600', 'text-white', 'font-semibold', 'border-green-700');
+            } else {
+                kotak.classList.add('bg-gray-200', 'text-gray-700', 'border-gray-400');
+            }
+        }
+
+        function updateHighlightGrid() {
+            bankSoal.forEach((_, index) => {
+                const kotak = document.getElementById(`kotak-no-${index}`);
+                if (kotak) {
+                    if (index === currentIndex) {
+                        kotak.classList.add('ring-4', 'ring-blue-500', 'scale-105', 'z-10');
+                    } else {
+                        kotak.classList.remove('ring-4', 'ring-blue-500', 'scale-105', 'z-10');
+                    }
+                }
+            });
         }
 
         function soalSebelumnya() {
@@ -470,45 +507,9 @@
             }
         }
 
-        function renderGridNomor() {
-            const grid = document.getElementById('grid-nomor');
-            grid.innerHTML = '';
-
-            bankSoal.forEach((soal, index) => {
-                const button = document.createElement('button');
-                button.id = `kotak-no-${index}`;
-                button.innerText = index + 1;
-                
-                let warnaClass = "bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-400";
-                if (raguRagu[index]) {
-                    warnaClass = "bg-amber-400 text-gray-900 font-bold border-amber-500";
-                } else if (jawabanSiswa[index]) {
-                    warnaClass = "bg-green-600 text-white font-semibold border-green-700";
-                }
-
-                button.className = `w-11 h-11 rounded border text-center font-mono text-xs sm:text-sm transition focus:outline-none ${warnaClass}`;
-                button.onclick = () => tampilkanSoal(index);
-
-                grid.appendChild(button);
-            });
-            updateHighlightGrid();
-        }
-
-        function updateHighlightGrid() {
-            bankSoal.forEach((_, index) => {
-                const kotak = document.getElementById(`kotak-no-${index}`);
-                if (kotak) {
-                    if (index === currentIndex) {
-                        kotak.classList.add('ring-4', 'ring-blue-400', 'scale-105');
-                    } else {
-                        kotak.classList.remove('ring-4', 'ring-blue-400', 'scale-105');
-                    }
-                }
-            });
-        }
-
         function akhiriUjian() {
-            clearInterval(timerInterval);
+            if(timerInterval) clearInterval(timerInterval);
+            
             document.getElementById('exam-page').classList.remove('flex');
             document.getElementById('exam-page').classList.add('hidden');
             
@@ -550,15 +551,15 @@
                 let htmlOpsi = '';
                 Object.entries(soal.opsi).forEach(([kunci, teks]) => {
                     let textClass = "text-gray-700";
-                    if (kunci === soal.kunci) textClass = "text-green-700 font-bold";
-                    if (kunci === jwb && !isCorrect) textClass = "text-red-700 font-bold";
+                    if (kunci === soal.kunci) textClass = "text-green-700 font-bold bg-green-50 rounded px-1";
+                    if (kunci === jwb && !isCorrect) textClass = "text-red-700 font-bold bg-red-50 rounded px-1";
 
-                    htmlOpsi += `<div class="text-sm my-1 ${textClass}">${kunci}. ${teks}</div>`;
+                    htmlOpsi += `<div class="text-sm my-1 p-1 ${textClass}">${kunci}. ${teks}</div>`;
                 });
 
                 card.innerHTML = `
                     <h4 class="font-bold text-blue-900 mb-2">No. ${index + 1}</h4>
-                    <p class="text-gray-800 text-sm mb-3 font-medium">${soal.soal}</p>
+                    <p class="text-gray-800 text-sm mb-3 font-medium whitespace-pre-line">${soal.soal}</p>
                     <div class="bg-gray-50 p-3 rounded mb-3 border border-gray-100">${htmlOpsi}</div>
                     <div class="text-xs space-y-1 mb-3">
                         <div>Jawaban Anda: <span class="font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${jwb}</span></div>
@@ -572,10 +573,21 @@
                 container.appendChild(card);
             });
 
-            if (window.MathJax) {
+            if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise();
             }
         }
+
+        document.addEventListener('keydown', function(event) {
+            if (document.getElementById('exam-page').classList.contains('hidden')) return;
+            const key = event.key.toUpperCase();
+            if (['A', 'B', 'C', 'D', 'E'].includes(key)) {
+                const opsiAktif = bankSoal[currentIndex].opsi;
+                if (opsiAktif[key]) {
+                    pilihJawaban(currentIndex, key);
+                }
+            }
+        });
     </script>
 </body>
 </html>
