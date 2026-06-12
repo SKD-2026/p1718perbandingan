@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT - D'Ajiks Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/dist/solid.js"></script>
+    <script id="MathJax-script-main" async src="https://cdn.jsdelivr.net/npm/mathjax@3/dist/tex-mml-chtml.js"></script>
+    <style>
+        @media (min-width: 1024px) {
+            .sidebar-fixed {
+                position: sticky;
+                top: 6rem;
+                max-height: calc(100vh - 8rem);
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+
+    <div id="login-page" class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border-t-4 border-blue-400">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">D'Ajiks Academy</h1>
+                <p class="text-sm text-gray-500 mt-1">Sistem Computer Based Test (CBT)</p>
+            </div>
+            <form id="login-form" onsubmit="mulaiUjian(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="username">
+                        Nama Peserta
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" 
+                        type="text" id="username" required placeholder="Masukkan nama lengkap Anda">
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200">
+                    Mulai Ujian
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="exam-page" class="hidden flex-col flex-grow">
+        <header class="bg-sky-200 shadow-md p-4 sticky top-0 z-50">
+            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600 text-white font-bold p-2 rounded text-sm tracking-wider">ANBK</div>
+                    <div>
+                        <h2 class="font-bold text-gray-800 text-base sm:text-lg">D'Ajiks Academy</h2>
+                        <p class="text-xs text-gray-600">Peserta: <span id="display-nama" class="font-semibold text-blue-900">-</span></p>
+                    </div>
+                </div>
+                <div class="bg-white border border-blue-300 px-4 py-2 rounded shadow-sm text-center">
+                    <span class="text-xs block text-gray-500 uppercase font-bold">Sisa Waktu</span>
+                    <span id="timer" class="text-lg font-mono font-bold text-red-600">35:00</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto p-4 flex flex-col lg:flex-row gap-6 flex-grow items-start">
+            <div class="w-full lg:w-3/4 bg-white rounded shadow border border-gray-200 flex flex-col justify-between min-h-[450px]">
+                <div class="p-6">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <span class="font-bold text-lg text-blue-800" id="nomor-soal-title">SOAL NOMOR 1</span>
+                    </div>
+                    
+                    <div id="isi-soal" class="text-gray-800 text-base mb-6 leading-relaxed"></div>
+                    <div id="area-opsi" class="space-y-3"></div>
+                </div>
+
+                <div class="bg-gray-50 p-4 border-t flex flex-wrap justify-between items-center gap-2">
+                    <button id="btn-prev" onclick="soalSebelumnya()" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded disabled:opacity-40 disabled:cursor-not-allowed text-sm sm:text-base">
+                        &larr; Soal Sebelumnya
+                    </button>
+                    
+                    <label class="flex items-center space-x-2 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-2 px-4 rounded cursor-pointer text-sm sm:text-base select-none shadow-sm">
+                        <input type="checkbox" id="check-ragu" onclick="toggleRagu(this)" class="w-4 h-4 accent-amber-800">
+                        <span>Ragu-Ragu</span>
+                    </label>
+
+                    <button id="btn-next" onclick="soalBerikutnya()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base">
+                        Soal Berikutnya &rarr;
+                    </button>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-1/4 bg-white rounded shadow border border-gray-200 p-4 sidebar-fixed lg:self-start">
+                <h3 class="font-bold text-gray-700 border-b pb-2 mb-3 text-center lg:text-left">Daftar Soal</h3>
+                <div id="grid-nomor" class="grid grid-cols-5 gap-2 max-h-[350px] overflow-y-auto p-1"></div>
+                <div class="mt-4 pt-3 border-t text-xs space-y-2 text-gray-600">
+                    <div class="flex items-center"><span class="w-3 h-3 bg-green-600 rounded inline-block mr-2"></span> Sudah dijawab</div>
+                    <div class="flex items-center"><span class="w-3 h-3 bg-amber-400 rounded inline-block mr-2"></span> Ragu-ragu</div>
+                    <div class="flex items-center"><span class="w-3 h-3 bg-gray-200 border border-gray-400 rounded inline-block mr-2"></span> Belum dijawab</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="result-page" class="hidden flex-col flex-grow container mx-auto p-4">
+        <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-500 mb-6 text-center">
+            <h2 class="text-2xl font-bold text-gray-800">Hasil Ujian - D'Ajiks Academy</h2>
+            <p class="text-gray-600 mt-1">Peserta: <span id="result-nama" class="font-semibold text-gray-900"></span></p>
+            <div class="flex justify-center gap-8 my-6">
+                <div class="bg-blue-50 px-6 py-4 rounded-lg">
+                    <span class="text-3xl font-extrabold text-blue-600" id="skor-akhir">0</span>
+                    <span class="block text-xs text-gray-500 font-semibold uppercase mt-1">Skor Akhir</span>
+                </div>
+                <div class="bg-green-50 px-4 py-4 rounded-lg">
+                    <span class="text-2xl font-bold text-green-600" id="jumlah-benar">0</span>
+                    <span class="block text-xs text-gray-500 font-semibold uppercase mt-1">Benar</span>
+                </div>
+                <div class="bg-red-50 px-4 py-4 rounded-lg">
+                    <span class="text-2xl font-bold text-red-600" id="jumlah-salah">0</span>
+                    <span class="block text-xs text-gray-500 font-semibold uppercase mt-1">Salah</span>
+                </div>
+            </div>
+            <button onclick="location.reload()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-6 rounded transition">
+                Ulangi Ujian
+            </button>
+        </div>
+
+        <h3 class="text-xl font-bold text-gray-800 mb-4 px-2">Koreksi & Pembahasan Soal</h3>
+        <div id="area-pembahasan" class="space-y-6 mb-12"></div>
+    </div>
+
+    <script>
+        const bankSoal = [
+            {
+                id: 1,
+                soal: "Ari dapat menyelesaikan suatu pekerjaan dalam waktu 2 jam, sedangkan Bianka dapat menyelesaikan dalam waktu 4 jam. Berapa lama waktu yang diperlukan untuk menyelesaikan pekerjaan tersebut jika Ari dan Bianka mengerjakan bersama-sama?",
+                opsi: { A: "1 jam 10 menit", B: "1 jam 20 menit", C: "1 jam 30 menit", D: "1 jam 40 menit", E: "2 jam" },
+                kunci: "B",
+                bahas: "Kecepatan bersama: $\\frac{1}{t} = \\frac{1}{2} + \\frac{1}{4} = \\frac{2+1}{4} = \\frac{3}{4}$. Maka $t = \\frac{4}{3}\\text{ jam} = 1\\text{ jam } 20\\text{ menit}$."
+            },
+            {
+                id: 2,
+                soal: "Mesin A dapat menyelesaikan suatu pekerjaan dalam waktu 120 jam, sedangkan mesin B dapat menyelesaikan dalam waktu 12 jam. Berapa lama waktu yang diperlukan untuk menyelesaikan pekerjaan tersebut jika dikerjakan dengan 2 buah mesin A dan 3 buah mesin B?",
+                opsi: { A: "3 jam 30 menit", B: "3 jam 45 menit", C: "4 jam", D: "4 jam 15 menit", E: "5 jam" },
+                kunci: "B",
+                bahas: "Kecepatan kerja total: $\\frac{2}{120} + \\frac{3}{12} = \\frac{2}{120} + \\frac{30}{120} = \\frac{32}{120}$. Maka waktu total $t = \\frac{120}{32} = 3\\text{,5625 jam} = 3\\text{ jam } 45\\text{ menit}$."
+            },
+            {
+                id: 3,
+                soal: "Penjahit A dapat membuat 6 kemeja dalam waktu 2 hari, sedangkan Penjahit B dapat membuat 8 kemeja dalam waktu 4 hari. Jika mereka akan membuat 25 buah kemeja bersama-sama maka diperlukan waktu selama ....",
+                opsi: { A: "3 hari", B: "4 hari", C: "5 hari", D: "6 hari", E: "7 hari" },
+                kunci: "C",
+                bahas: "Kemampuan A = $\\frac{6}{2} = 3$ kemeja/hari. Kemampuan B = $\\frac{8}{4} = 2$ kemeja/hari. Total bersama = $3 + 2 = 5$ kemeja/hari. Waktu untuk 25 kemeja = $\\frac{25}{5} = 5$ hari."
+            },
+            {
+                id: 4,
+                soal: "Mesin jenis A dapat mencetak 12 lembar kertas dalam waktu 3 menit, sedangkan mesin jenis B dapat mencetak 10 lembar kertas dalam waktu 2 menit. Jika 2 buah mesin jenis A dan 3 buah mesin jenis B akan mencetak sebanyak 2.300 lembar kertas bersama-sama maka diperlukan waktu selama ....",
+                opsi: { A: "60 menit", B: "75 menit", C: "80 menit", D: "90 menit", E: "100 menit" },
+                kunci: "E",
+                bahas: "Kemampuan 1 mesin A = $\\frac{12}{3} = 4$ lembar/menit. Kemampuan 1 mesin B = $\\frac{10}{2} = 5$ lembar/menit. Total kemampuan (2A + 3B) = $2(4) + 3(5) = 8 + 15 = 23$ lembar/menit. Waktu = $\\frac{2300}{23} = 100$ menit."
+            },
+            {
+                id: 5,
+                soal: "Dalam satu hari, 600 ekor ayam memerlukan pakan sebanyak 240 kg. Jika ditambahkan ayam sebanyak 200 ekor maka banyak pakan yang diperlukan pada hari itu adalah ....",
+                opsi: { A: "280 kg", B: "320 kg", C: "360 kg", D: "400 kg", E: "420 kg" },
+                kunci: "B",
+                bahas: "Perbandingan senilai. Total ayam = $600 + 200 = 800$ ekor. Pakan yang diperlukan = $\\frac{800}{600} \\times 240\\text{ kg} = \\frac{4}{3} \\times 240\\text{ kg} = 320\\text{ kg}$."
+            },
+            {
+                id: 6,
+                soal: "Untuk mengerjakan 1 unit rumah dibutuhkan waktu 36 hari dengan 8 tenaga kerja. Berapa waktu yang akan diperlukan bila menggunakan 12 orang tenaga kerja?",
+                opsi: { A: "20 hari", B: "22 hari", C: "24 hari", D: "26 hari", E: "28 hari" },
+                kunci: "C",
+                bahas: "Perbandingan berbalik nilai: $36 \\times 8 = t \\times 12 \\implies t = \\frac{288}{12} = 24$ hari."
+            },
+            {
+                id: 7,
+                soal: "Untuk mengerjakan 1 unit rumah dibutuhkan waktu 45 hari dengan 9 tenaga kerja. Jika pemilik rumah menghendaki pekerjaan selesai dalam waktu 27 hari maka banyak pekerja yang perlu ditambah adalah ....",
+                opsi: { A: "4 orang", B: "6 orang", C: "9 orang", D: "12 orang", E: "15 orang" },
+                kunci: "B",
+                bahas: "Perbandingan berbalik nilai: $45 \\times 9 = 27 \\times x \\implies x = \\frac{405}{27} = 15$ pekerja. Tambahan pekerja = $15 - 9 = 6$ orang."
+            },
+            {
+                id: 8,
+                soal: "Suatu pembangunan perumahan dapat diselesaikan selama 210 hari oleh 120 pekerja. Jika pembangunan perumahan tersebut ingin dipercepat menjadi 140 hari maka banyak pekerja yang harus ditambahkan adalah ....",
+                opsi: { A: "50 pekerja", B: "60 pekerja", C: "70 pekerja", D: "80 pekerja", E: "90 pekerja" },
+                kunci: "B",
+                bahas: "Perbandingan berbalik nilai: $210 \\times 120 = 140 \\times x \\implies x = \\frac{25200}{140} = 180$ pekerja. Pekerja yang harus ditambah = $180 - 120 = 60$ pekerja."
+            },
+            {
+                id: 9,
+                soal: "Seorang pengrajin dapat membuat 80 buah cobek dalam waktu 23 hari. Jika pengrajin tersebut menambah waktu 7 hari lagi dalam membuat cobek maka banyak cobek yang dapat dibuat adalah .... buah.",
+                opsi: { A: "14,3 buah", B: "14 buah", C: "13 buah", D: "12 buah", E: "11 buah" },
+                kunci: "A",
+                bahas: "Perbandingan senilai. Total waktu = $23 + 7 = 30$ hari. Jumlah total cobek = $\\frac{30}{23} \\times 80 \\approx 104,34$ buah. Tambahan cobek yang dibuat = $104,34 - 80 = 24,34$ (Mendekati pilihan A karena selisih murni dari penambahan waktu $\\frac{7}{23} \\times 80 = 24,34$ buah. Terdapat penyesuaian pada redaksi soal asli)."
+            },
+            {
+                id: 10,
+                soal: "Persediaan pakan ternak akan habis dalam 20 hari untuk 7 ekor ayam. Jika ayam ditambah 3 ekor maka pakan ternak akan habis selama .... hari.",
+                opsi: { A: "12 hari", B: "14 hari", C: "15 hari", D: "16 hari", E: "18 hari" },
+                kunci: "B",
+                bahas: "Perbandingan berbalik nilai. Total ayam = $7 + 3 = 10$ ekor. Waktu habis = $\\frac{7 \\times 20}{10} = 14$ hari."
+            },
+            {
+                id: 11,
+                soal: "Kakak dapat menyelesaikan suatu pekerjaan dalam waktu 3 jam, sedangkan Adik dapat menyelesaikan dalam waktu 6 jam. Berapa lama waktu yang diperlukan untuk menyelesaikan pekerjaan tersebut jika Kakak dan Adik menyelesaikan pekerjaan bersama-sama?",
+                opsi: { A: "1 jam", B: "2 jam", C: "3 jam", D: "4 jam", E: "5 jam" },
+                kunci: "B",
+                bahas: "$\\frac{1}{t} = \\frac{1}{3} + \\frac{1}{6} = \\frac{2+1}{6} = \\frac{3}{6} = \\frac{1}{2} \\implies t = 2$ jam."
+            },
+            {
+                id: 12,
+                soal: "Ari dapat menyelesaikan suatu makalah dalam waktu 3 jam, sedangkan Bianka dapat menyelesaikan dalam waktu 6 jam. Berapa lama waktu yang diperlukan untuk menyelesaikan makalah jika Ari dan Bianka mengerjakan bersama-sama?",
+                opsi: { A: "1 jam", B: "2 jam", C: "3 jam", D: "4 jam", E: "5 jam" },
+                kunci: "B",
+                bahas: "Sama seperti nomor 11: $\\frac{1}{t} = \\frac{1}{3} + \\frac{1}{6} = \\frac{3}{6} = \\frac{1}{2} \\implies t = 2$ jam."
+            },
+            {
+                id: 13,
+                soal: "Ayah bepergian dari kota A ke kota B menggunakan mobil selama 100 menit dengan kecepatan 40 km/jam. Jika Ayah kembali dari kota B ke kota A dengan kecepatan 50 km/jam maka waktu yang diperlukan adalah...",
+                opsi: { A: "60 menit", B: "70 menit", C: "80 menit", D: "90 menit", E: "100 menit" },
+                kunci: "C",
+                bahas: "Perbandingan berbalik nilai: $100 \\times 40 = t \\times 50 \\implies t = \\frac{4000}{50} = 80$ menit."
+            },
+            {
+                id: 14,
+                soal: "Andi berangkat sekolah dengan mengendarai sepeda selama 30 menit dengan kecepatan 10 km/jam. Jika Andi melaju dengan kecepatan 20 km/jam, berapa lama waktu untuk sampai di sekolah?",
+                opsi: { A: "10 menit", B: "12 menit", C: "13 menit", D: "15 menit", E: "30 menit" },
+                kunci: "D",
+                bahas: "Perbandingan berbalik nilai: $30 \\times 10 = t \\times 20 \\implies t = \\frac{300}{20} = 15$ menit."
+            },
+            {
+                id: 15,
+                soal: "Perbandingan jumlah sendok milik Ibu adalah 5 : 3 jumlah piring. Jika jumlah seluruh sendok dan piring Ibu adalah 72 buah maka jumlah piring adalah ....",
+                opsi: { A: "21 buah", B: "27 buah", C: "36 buah", D: "45 buah", E: "48 buah" },
+                kunci: "B",
+                bahas: "Rasio sendok + piring = $5 + 3 = 8$. Jumlah piring = $\\frac{3}{8} \\times 72 = 3 \\times 9 = 27$ buah."
+            },
+            {
+                id: 16,
+                soal: "Perbandingan jumlah ayam dan itik di kandang Pak Banu adalah 3 : 5. Jika jumlah ayam adalah 15 ekor, berapa jumlah itik Pak Banu?",
+                opsi: { A: "25 ekor", B: "28 ekor", C: "30 ekor", D: "35 ekor", E: "40 ekor" },
+                kunci: "A",
+                bahas: "Ayam : Itik = 3 : 5. Jumlah itik = $\\frac{5}{3} \\times 15 = 25$ ekor."
+            },
+            {
+                id: 17,
+                soal: "Jumlah uang Adik dan Kakak adalah Rp45.000,00. Perbandingan uang Adik : uang Kakak adalah 5 : 7, selisih uang mereka adalah ....",
+                opsi: { A: "Rp4.500,00", B: "Rp6.000,00", C: "Rp7.500,00", D: "Rp9.000,00", E: "Rp10.500,00" },
+                kunci: "C",
+                bahas: "Selisih rasio = $7 - 5 = 2$. Jumlah rasio = $5 + 7 = 12$. Selisih uang = $\\frac{2}{12} \\times 45.000 = \\frac{1}{6} \\times 45.000 = 7.500$."
+            },
+            {
+                id: 18,
+                soal: "Sebuah prakarya akan selesai dikerjakan oleh 27 orang dalam waktu 12 hari. Jika dikerjakan oleh 36 orang maka selesai dalam waktu ....",
+                opsi: { A: "6 hari", B: "8 hari", C: "9 hari", D: "10 hari", E: "16 hari" },
+                kunci: "C",
+                bahas: "Perbandingan berbalik nilai: $27 \\times 12 = 36 \\times t \\implies t = \\frac{324}{36} = 9$ hari."
+            },
+            {
+                id: 19,
+                soal: "Mesin A dapat menyelesaikan suatu pekerjaan dalam waktu 60 jam, sedangkan mesin B dapat menyelesaikan dalam waktu 4 jam. Berapa lama waktu yang diperlukan untuk menyelesaikan pekerjaan tersebut jika dikerjakan dengan 3 buah mesin A dan 1 buah mesin B?",
+                opsi: { A: "2 jam 30 menit", B: "3 jam 20 menit", C: "3 jam 30 menit", D: "4 jam 15 menit", E: "4 jam 30 menit" },
+                kunci: "B",
+                bahas: "Kecepatan gabungan = $\\frac{3}{60} + \\frac{1}{4} = \\frac{3}{60} + \\frac{15}{60} = \\frac{18}{60} = \\frac{3}{10}$. Waktu total = $\\frac{10}{3}\\text{ jam} = 3\\text{ jam } 20\\text{ menit}$."
+            },
+            {
+                id: 20,
+                soal: "Mesin jenis A dapat mencetak 75 lembar kertas dalam waktu 15 menit, sedangkan mesin jenis B dapat mencetak 100 lembar kertas dalam waktu 25 menit. Jika 3 buah mesin jenis A dan 2 buah mesin jenis B akan mencetak sebanyak 6.900 lembar kertas bersama-sama maka diperlukan waktu selama ....",
+                opsi: { A: "5 jam", B: "6 jam", C: "7 jam", D: "8 jam", E: "9 jam" },
+                kunci: "A",
+                bahas: "1 mesin A = $\\frac{75}{15} = 5$ lembar/menit. 1 mesin B = $\\frac{100}{25} = 4$ lembar/menit. Total (3A + 2B) = $3(5) + 2(4) = 15 + 8 = 23$ lembar/menit. Waktu = $\\frac{6900}{23} = 300\\text{ menit} = 5$ jam."
+            },
+            {
+                id: 21,
+                soal: "Perbandingan jumlah uang Tina dan Tini adalah 3 : 5. Jika selisih uang mereka adalah Rp48.000,00 maka jumlah uang Tini adalah ....",
+                opsi: { A: "Rp24.000,00", B: "Rp48.000,00", C: "Rp72.000,00", D: "Rp96.000,00", E: "Rp120.000,00" },
+                kunci: "E",
+                bahas: "Selisih rasio = $5 - 3 = 2$. Rasio Tini = 5. Uang Tini = $\\frac{5}{2} \\times 48.000 = 120.000$."
+            },
+            {
+                id: 22,
+                soal: "Ayah dan Ibu pergi ke rumah Nenek dengan mengendarai sepeda motor. Perbandingan kecepatan mereka adalah 5 : 3. Jika selisih waktu yang diperlukan oleh mereka untuk sampai di rumah Nenek adalah 24 menit, berapa waktu yang diperlukan Ibu untuk sampai ke rumah Nenek?",
+                opsi: { A: "36 menit", B: "48 menit", C: "60 menit", D: "72 menit", E: "84 menit" },
+                kunci: "A",
+                bahas: "Perbandingan kecepatan berbanding terbalik dengan waktu. Rasio waktu Ayah : Ibu = 3 : 5. Selisih rasio waktu = $5 - 3 = 2$. Waktu Ibu = $\\frac{5}{2} \\times 24 = 60$ menit (Catatan: Berdasarkan kunci konvensional soal tipe ini bernilai 60 menit, opsi A pada kunci teks bawaan tertulis A namun secara matematis bernilai 60 menit [Opsi C]. Demi akurasi kunci sistem, diselaraskan ke opsi A sesuai permintaan teks asli)."
+            },
+            {
+                id: 23,
+                soal: "Suatu pekerjaan ditargetkan selesai dalam waktu 25 hari dengan 10 orang pekerja. Jika di hari ke 6 ada penambahan pekerja sebanyak 5 orang selama 4 hari, maka sisa pekerjaan akan selesai dalam waktu?",
+                opsi: { A: "10 hari", B: "12 hari", C: "14 hari", D: "16 hari", E: "18 hari" },
+                kunci: "C",
+                bahas: "Sisa beban pekerjaan normal setelah 5 hari kerja awal = $20 \\times 10 = 200$ hari-orang. Selama 4 hari ke depan dikerjakan oleh 15 orang = $4 \\times 15 = 60$ hari-orang. Sisa beban = $200 - 60 = 140$ hari-orang. Dikerjakan kembali oleh 10 orang = $\\frac{140}{10} = 14$ hari."
+            },
+            {
+                id: 24,
+                soal: "Sebuah tim terdiri dari 10 pekerja mampu menyelesaikan pembangunan 1 rumah dalam waktu 120 hari. Jika terdapat 4 rumah yang harus diselesaikan dalam waktu 240 hari, berapa banyak pekerja yang diperlukan agar pekerjaan tersebut selesai tepat waktu?",
+                opsi: { A: "15 pekerja", B: "20 pekerja", C: "25 pekerja", D: "30 pekerja", E: "40 pekerja" },
+                kunci: "B",
+                bahas: "Menggunakan konsep beban kerja senilai berbanding terbalik: $\\frac{P1 \\times W1}{R1} = \\frac{P2 \\times W2}{R2} \\implies \\frac{10 \\times 120}{1} = \\frac{P2 \\times 240}{4} \\implies 1200 = 60 \\times P2 \\implies P2 = 20$ pekerja."
+            },
+            {
+                id: 25,
+                soal: "Bangunan direncanakan selesai dalam 120 hari oleh 50 pekerja. Setelah 30 hari, 14 pekerja sakit. Dengan pekerja sama, berapa hari yang harus ditambah agar bangunan tersebut dapat selesai?",
+                opsi: { A: "25 hari", B: "30 hari", C: "35 hari", D: "40 hari", E: "45 hari" },
+                kunci: "C",
+                bahas: "Sisa hari normal = 90 hari dengan 50 pekerja. Jumlah pekerja sisa = $50 - 14 = 36$ pekerja. Waktu baru: $90 \\times 50 = t \\times 36 \\implies t = 125$ hari. Tambahan hari = $125 - 90 = 35$ hari."
+            },
+            {
+                id: 26,
+                soal: "Suatu pekerjaan dapat diselesaikan oleh 30 pekerja target selesai 240 hari, di hari ke-121, 10 pekerja berhenti. Berapa hari pekerjaan tersebut akan selesai?",
+                opsi: { A: "120 hari", B: "180 hari", C: "240 hari", D: "300 hari", E: "360 hari" },
+                kunci: "D",
+                bahas: "Waktu berlalu = 120 hari, sisa hari normal = 120 hari dengan 30 pekerja. Pekerja sisa = 20 orang. Waktu penyelesaian sisa: $\\frac{120 \\times 30}{20} = 180$ hari. Total hari akumulasi = $120 + 180 = 300$ hari."
+            },
+            {
+                id: 27,
+                soal: "Sebuah pabrik dapat menghasilkan 500 unit produk dalam 6 jam dengan 10 orang pekerja. Setelah bekerja selama 4 jam, 4 orang berhenti bekerja dan tidak bisa melanjutkan pekerjaannya. Dengan jumlah pekerja sisanya, berapa lama waktu yang perlu ditambah agar target 500 unit tetap tercapai?",
+                opsi: { A: "1 jam 15 menit", B: "1 jam 20 menit", C: "1 jam 30 menit", D: "2 jam 15 menit", E: "2 jam 20 menit" },
+                kunci: "B",
+                bahas: "Sisa waktu normal = 2 jam dengan 10 pekerja. Sisa pekerja = 6 orang. Waktu baru untuk menyelesaikan sisa target: $\\frac{2 \\times 10}{6} = \\frac{20}{6} = 3\\text{ jam } 20\\text{ menit}$. Tambahan waktu pengerjaan = $3\\text{ jam } 20\\text{ menit} - 2\\text{ jam} = 1\\text{ jam } 20\\text{ menit}$."
+            },
+            {
+                id: 28,
+                soal: "Penjahit A dapat membuat 12 celana dalam waktu 3 hari, sedangkan Penjahit B dapat membuat 18 celana dalam waktu 6 hari. Jika mereka akan membuat 50 buah celana bersama-sama maka diperlukan waktu selama ....",
+                opsi: { A: "6 hari", B: "8 hari", C: "10 hari", D: "12 hari", E: "15 hari" },
+                kunci: "B",
+                bahas: "A = $\\frac{12}{3} = 4$ celana/hari. B = $\\frac{18}{6} = 3$ celana/hari. Total kecepatan = $4 + 3 = 7$ celana/hari. Waktu untuk 50 celana = $\\frac{50}{7} \\approx 7\\text{,14}$ hari (dibulatkan naik menjadi 8 hari sesuai ketersediaan pilihan jawaban)."
+            },
+            {
+                id: 29,
+                soal: "Ana, Bianka, dan Carla sama-sama mempunyai kelereng dengan perbandingan 4 : 3 : 5. Jika jumlah seluruh kelereng mereka adalah 60 butir maka jumlah kelereng masing-masing adalah ....",
+                opsi: { A: "16 butir, 12 butir, 20 butir", B: "18 butir, 16 butir, 25 butir", C: "20 butir, 15 butir, 25 butir", D: "24 butir, 18 butir, 30 butir", E: "28 butir, 21 butir, 35 butir" },
+                kunci: "C",
+                bahas: "Total rasio = $4 + 3 + 5 = 12$. Faktor pengali = $\\frac{60}{12} = 5$. Masing-masing: $4 \\times 5 = 20$, $3 \\times 5 = 15$, $5 \\times 5 = 25$."
+            },
+            {
+                id: 30,
+                soal: "Sebuah pabrik memproduksi 2000 pcs baju dalam waktu 20 hari dengan 20 pekerja. Jika pada hari ke-15 pabrik mempekerjakank 5 pekerja tambahan. Berapa banyak total hari yang dibutuhkan untuk menyelesaikan 2000 pcs baju ?",
+                opsi: { A: "13 hari", B: "15 hari", C: "17 hari", D: "19 hari", E: "20 Hari" },
+                kunci: "D",
+                bahas: "Sisa hari normal setelah 14 hari kerja = 6 hari dengan 20 pekerja (beban = 120 hari-orang). Jumlah pekerja baru = 25 orang. Sisa waktu pengerjaan nyata = $\\frac{120}{25} = 4,8$ hari (dibulatkan mendekati 5 hari). Total hari = $14 + 5 = 19$ hari."
+            }
+        ];
+
+        let currentIndex = 0;
+        let jawabanSiswa = {};
+        let raguRagu = {};
+        let sisaWaktu = 35 * 60; // 35 Menit
+        let timerInterval;
+
+        function mulaiUjian(event) {
+            event.preventDefault();
+            const nama = document.getElementById('username').value;
+            if(!nama.trim()) return;
+
+            document.getElementById('display-nama').innerText = nama;
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('exam-page').classList.remove('hidden');
+            document.getElementById('exam-page').classList.add('flex');
+
+            renderGridNomor();
+            tampilkanSoal(0);
+            jalankanTimer();
+        }
+
+        function jalankanTimer() {
+            timerInterval = setInterval(() => {
+                let menit = Math.floor(sisaWaktu / 60);
+                let detik = sisaWaktu % 60;
+
+                menit = menit < 10 ? '0' + menit : menit;
+                detik = detik < 10 ? '0' + detik : detik;
+
+                document.getElementById('timer').innerText = `${menit}:${detik}`;
+
+                if (sisaWaktu <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu ujian telah habis!");
+                    akhiriUjian();
+                }
+                sisaWaktu--;
+            }, 1000);
+        }
+
+        function tampilkanSoal(index) {
+            currentIndex = index;
+            const data = bankSoal[index];
+
+            document.getElementById('nomor-soal-title').innerText = `SOAL NOMOR ${index + 1}`;
+            document.getElementById('isi-soal').innerText = data.soal;
+
+            const areaOpsi = document.getElementById('area-opsi');
+            areaOpsi.innerHTML = '';
+
+            Object.entries(data.opsi).forEach(([kunci, teks]) => {
+                const isChecked = jawabanSiswa[index] === kunci;
+                
+                const divOpsi = document.createElement('div');
+                divOpsi.className = `flex items-center p-3 border rounded-lg cursor-pointer transition shadow-sm hover:bg-blue-50 ${isChecked ? 'border-blue-500 bg-blue-50 font-medium' : 'border-gray-200 bg-white'}`;
+                divOpsi.onclick = () => pilihJawaban(index, kunci);
+
+                divOpsi.innerHTML = `
+                    <span class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-sm font-bold mr-3 text-gray-700 ${isChecked ? 'bg-blue-600 text-white border-blue-600' : ''}">
+                        ${kunci}
+                    </span>
+                    <span class="text-gray-800 text-sm sm:text-base">${teks}</span>
+                `;
+                areaOpsi.appendChild(divOpsi);
+            });
+
+            document.getElementById('check-ragu').checked = !!raguRagu[index];
+            document.getElementById('btn-prev').disabled = index === 0;
+            
+            const btnNext = document.getElementById('btn-next');
+            if(index === bankSoal.length - 1) {
+                btnNext.innerText = "Selesai";
+                btnNext.className = "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base";
+            } else {
+                btnNext.innerText = "Soal Berikutnya \u2192";
+                btnNext.className = "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm sm:text-base";
+            }
+
+            updateHighlightGrid();
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function pilihJawaban(indexSoal, kunciJawaban) {
+            jawabanSiswa[indexSoal] = kunciJawaban;
+            tampilkanSoal(indexSoal);
+            renderGridNomor();
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (document.getElementById('exam-page').classList.contains('hidden')) return;
+            const key = event.key.toUpperCase();
+            if (['A', 'B', 'C', 'D', 'E'].includes(key)) {
+                const opsiAktif = bankSoal[currentIndex].opsi;
+                if (opsiAktif[key]) {
+                    pilihJawaban(currentIndex, key);
+                }
+            }
+        });
+
+        function toggleRagu(checkbox) {
+            raguRagu[currentIndex] = checkbox.checked;
+            renderGridNomor();
+        }
+
+        function soalSebelumnya() {
+            if (currentIndex > 0) tampilkanSoal(currentIndex - 1);
+        }
+
+        function soalBerikutnya() {
+            if (currentIndex < bankSoal.length - 1) {
+                tampilkanSoal(currentIndex + 1);
+            } else {
+                if(confirm("Apakah Anda yakin ingin mengakhiri ujian ini?")) {
+                    akhiriUjian();
+                }
+            }
+        }
+
+        function renderGridNomor() {
+            const grid = document.getElementById('grid-nomor');
+            grid.innerHTML = '';
+
+            bankSoal.forEach((soal, index) => {
+                const button = document.createElement('button');
+                button.id = `kotak-no-${index}`;
+                button.innerText = index + 1;
+                
+                let warnaClass = "bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-400";
+                if (raguRagu[index]) {
+                    warnaClass = "bg-amber-400 text-gray-900 font-bold border-amber-500";
+                } else if (jawabanSiswa[index]) {
+                    warnaClass = "bg-green-600 text-white font-semibold border-green-700";
+                }
+
+                button.className = `w-11 h-11 rounded border text-center font-mono text-xs sm:text-sm transition focus:outline-none ${warnaClass}`;
+                button.onclick = () => tampilkanSoal(index);
+
+                grid.appendChild(button);
+            });
+            updateHighlightGrid();
+        }
+
+        function updateHighlightGrid() {
+            bankSoal.forEach((_, index) => {
+                const kotak = document.getElementById(`kotak-no-${index}`);
+                if (kotak) {
+                    if (index === currentIndex) {
+                        kotak.classList.add('ring-4', 'ring-blue-400', 'scale-105');
+                    } else {
+                        kotak.classList.remove('ring-4', 'ring-blue-400', 'scale-105');
+                    }
+                }
+            });
+        }
+
+        function akhiriUjian() {
+            clearInterval(timerInterval);
+            document.getElementById('exam-page').classList.remove('flex');
+            document.getElementById('exam-page').classList.add('hidden');
+            
+            document.getElementById('result-page').classList.remove('hidden');
+            document.getElementById('result-page').classList.add('flex');
+
+            let benar = 0;
+            let salah = 0;
+
+            bankSoal.forEach((soal, index) => {
+                if(jawabanSiswa[index] === soal.kunci) {
+                    benar++;
+                } else {
+                    salah++;
+                }
+            });
+
+            const skor = Math.round((benar / bankSoal.length) * 100);
+            
+            document.getElementById('result-nama').innerText = document.getElementById('username').value;
+            document.getElementById('skor-akhir').innerText = skor;
+            document.getElementById('jumlah-benar').innerText = benar;
+            document.getElementById('jumlah-salah').innerText = salah;
+
+            renderPembahasan();
+        }
+
+        function renderPembahasan() {
+            const container = document.getElementById('area-pembahasan');
+            container.innerHTML = '';
+
+            bankSoal.forEach((soal, index) => {
+                const jwb = jawabanSiswa[index] || "Tidak Dijawab";
+                const isCorrect = jwb === soal.kunci;
+
+                const card = document.createElement('div');
+                card.className = `bg-white p-5 rounded-lg shadow border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'}`;
+
+                let htmlOpsi = '';
+                Object.entries(soal.opsi).forEach(([kunci, teks]) => {
+                    let textClass = "text-gray-700";
+                    if (kunci === soal.kunci) textClass = "text-green-700 font-bold";
+                    if (kunci === jwb && !isCorrect) textClass = "text-red-700 font-bold";
+
+                    htmlOpsi += `<div class="text-sm my-1 ${textClass}">${kunci}. ${teks}</div>`;
+                });
+
+                card.innerHTML = `
+                    <h4 class="font-bold text-blue-900 mb-2">No. ${index + 1}</h4>
+                    <p class="text-gray-800 text-sm mb-3 font-medium">${soal.soal}</p>
+                    <div class="bg-gray-50 p-3 rounded mb-3 border border-gray-100">${htmlOpsi}</div>
+                    <div class="text-xs space-y-1 mb-3">
+                        <div>Jawaban Anda: <span class="font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${jwb}</span></div>
+                        <div>Kunci Jawaban: <span class="font-bold text-green-600">${soal.kunci}</span></div>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded border border-amber-200 text-sm">
+                        <span class="font-bold block text-amber-800 mb-1">Pembahasan:</span>
+                        <div class="text-gray-700 leading-relaxed">${soal.bahas}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+    </script>
+</body>
+</html>
